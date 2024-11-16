@@ -17,7 +17,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'xarr-notify',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.blue,
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.blue, // 光标颜色
+          selectionColor: Colors.blue.withOpacity(0.3), // 文本选择颜色
+          selectionHandleColor: Colors.blue, // 选择光标颜色
+        ),
+      ),
       home: ConnectionPage(),
     );
   }
@@ -206,9 +212,38 @@ class _ConnectionPageState extends State<ConnectionPage> {
   // 删除 7 天前的消息
   void _deleteOldMessages() async {
     DateTime sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7));
-    await DatabaseHelper().deleteMessagesOlderThan(sevenDaysAgo);
-    _loadPreferences(); // 重新加载偏好以更新 UI
+
+    // 获取删除前的消息数量
+    int deletedCount = await DatabaseHelper().deleteMessagesOlderThan(sevenDaysAgo);
+
+    // 重新加载偏好以更新 UI
+    await _loadPreferences();
+
+    // 显示删除结果的弹窗
+    _showDeleteResultDialog(deletedCount);
   }
+
+// 显示删除结果的对话框
+  void _showDeleteResultDialog(int deletedCount) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('删除结果'),
+          content: Text('已成功删除 $deletedCount 条旧消息。'), // 显示删除数量
+          actions: [
+            TextButton(
+              child: const Text('关闭', style: TextStyle(color: Colors.blue)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -233,20 +268,50 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     children: [
                       TextField(
                         controller: _domainController,
-                        decoration: const InputDecoration(labelText: '链接域名'),
-                        style: TextStyle(fontSize: 18), // 增大字体
+                        decoration: const InputDecoration(
+                          labelText: '链接域名',
+                          labelStyle: TextStyle(color: Colors.blue), // 文本颜色为蓝色
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue), // 输入框下横线为蓝色
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue), // 聚焦时下横线为蓝色
+                          ),
+                        ),
+                        style: const TextStyle(fontSize: 18), // 增大字体
+                        cursorColor: Colors.blue, // 光标颜色为蓝色
                       ),
                       const SizedBox(height: 8), // 增加输入框之间的间距
                       TextField(
                         controller: _uidController,
-                        decoration: const InputDecoration(labelText: '用户UID'),
-                        style: TextStyle(fontSize: 18), // 增大字体
+                        decoration: const InputDecoration(
+                          labelText: '用户UID',
+                          labelStyle: TextStyle(color: Colors.blue), // 文本颜色为蓝色
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue), // 输入框下横线为蓝色
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue), // 聚焦时下横线为蓝色
+                          ),
+                        ),
+                        style: const TextStyle(fontSize: 18), // 增大字体
+                        cursorColor: Colors.blue, // 光标颜色为蓝色
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 8), // 增加输入框之间的间距
                       TextField(
                         controller: _keyController,
-                        decoration: const InputDecoration(labelText: '连接密钥'),
-                        style: TextStyle(fontSize: 18), // 增大字体
+                        decoration: const InputDecoration(
+                          labelText: '连接密钥',
+                          labelStyle: TextStyle(color: Colors.blue), // 文本颜色为蓝色
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue), // 输入框下横线为蓝色
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue), // 聚焦时下横线为蓝色
+                          ),
+                        ),
+                        style: const TextStyle(fontSize: 18), // 增大字体
+                        cursorColor: Colors.blue, // 光标颜色为蓝色
                       ),
                     ],
                   ),
