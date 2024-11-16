@@ -16,7 +16,7 @@
       @override
       Widget build(BuildContext context) {
         return MaterialApp(
-          title: 'xarr_notify',
+          title: 'xarr-notify',
           theme: ThemeData(primarySwatch: Colors.blue),
           home: ConnectionPage(),
         );
