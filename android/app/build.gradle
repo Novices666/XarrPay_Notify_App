@@ -50,6 +50,10 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             //signingConfig = signingConfigs.debug
+            //flutter build apk --obfuscate --split-debug-info=splitMap --target-platform android-arm,android-arm64,android-x64 --split-per-abi
+            minifyEnabled true //添加proguard
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'   //添加proguard
             signingConfig signingConfigs.release
         }
     }

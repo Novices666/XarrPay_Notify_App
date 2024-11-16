@@ -37,4 +37,13 @@ class DatabaseHelper {
     final db = await database;
     return await db.query('messages');
   }
+
+  Future<void> deleteMessagesOlderThan(DateTime date) async {
+    final db = await database; // 获取数据库实例
+    await db.delete(
+      'messages',
+      where: 'created_at < ?',
+      whereArgs: [date.toIso8601String()],
+    );
+  }
 }
